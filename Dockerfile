@@ -4,48 +4,12 @@ FROM --platform=linux/amd64 ubuntu:24.04
 # 避免安裝過程中的交互式提示
 ENV DEBIAN_FRONTEND=noninteractive
 
-# 安裝基本工具
+# 只安裝 sudo 和基本工具
 RUN apt-get update && apt-get install -y \
-    autoconf \
-    automake \
-    autotools-dev \
-    curl \
-    python3 \
-    python3-pip \
-    libmpc-dev \
-    libmpfr-dev \
-    libgmp-dev \
-    gawk \
-    build-essential \
-    bison \
-    flex \
-    texinfo \
-    gperf \
-    libtool \
-    patchutils \
-    bc \
-    zlib1g-dev \
-    libexpat-dev \
-    ninja-build \
-    git \
-    cmake \
-    libglib2.0-dev \
-    device-tree-compiler \
-    libboost-regex-dev \
-    libboost-all-dev \
-    nano \
-    vim \
-    sudo
+    sudo \
+    git
 
-# 設置 RISCV 環境變數
-ENV RISCV=/opt/riscv
-ENV PATH=$RISCV/bin:$PATH
-
-# 建立必要的目錄
-RUN mkdir -p $RISCV && \
-    mkdir -p $RISCV/bin
-
-# 建立一個非 root 用戶
+# 建立一個非 root 用戶並設置為 sudoer
 RUN useradd -m -s /bin/bash fish && \
     echo "fish:8008" | chpasswd && \
     adduser fish sudo && \
